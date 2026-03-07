@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>markdown tutorial — by n0ct & alemx</title>
+<meta name="description" content="a complete markdown tutorial. liquid glass, all the syntax you need."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --w: rgba(255,255,255,0.06);
+  --wb: rgba(255,255,255,0.12);
+  --blur: 20px;
+  --a1: #7dd3fc;
+  --a2: #c4b5fd;
+  --a3: #86efac;
+  --text: #eef0f6;
+  --dim: rgba(238,240,246,0.45);
+  --bg: #080b12;
+  --surf: rgba(255,255,255,0.04);
+  --bord: rgba(255,255,255,0.09);
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Geist Mono',monospace;
+  font-size:14px;
+  line-height:1.75;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+.scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);animation:drift ease-in-out infinite alternate}
+.b1{width:700px;height:700px;background:radial-gradient(circle,rgba(99,102,241,0.45),transparent 65%);top:-200px;left:-150px;animation-duration:14s}
+.b2{width:550px;height:550px;background:radial-gradient(circle,rgba(20,184,166,0.35),transparent 65%);bottom:-150px;right:-100px;animation-duration:18s;animation-delay:-6s}
+.b3{width:400px;height:400px;background:radial-gradient(circle,rgba(217,70,239,0.25),transparent 65%);top:35%;left:50%;animation-duration:22s;animation-delay:-10s}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(35px,-25px) scale(1.06)}}
+
+.grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(125,211,252,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,0.025) 1px,transparent 1px);
+  background-size:52px 52px;
+}
+
+.wrap{position:relative;z-index:1;display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+
+aside{
+  position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:none;
+  border-right:1px solid var(--bord);
+  background:rgba(8,11,18,0.7);
+  backdrop-filter:blur(var(--blur));
+  -webkit-backdrop-filter:blur(var(--blur));
+  padding:28px 0;
+}
+aside::-webkit-scrollbar{display:none}
+
+.logo{padding:0 20px 22px;border-bottom:1px solid var(--bord);margin-bottom:18px}
+.logo-text{
+  font-size:18px;font-weight:700;
+  background:linear-gradient(135deg,var(--a1),var(--a2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.logo-sub{font-size:10px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-top:3px}
+
+.nav-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(238,240,246,0.2);padding:8px 20px 4px;display:block}
+aside a{
+  display:block;padding:5px 20px;color:var(--dim);text-decoration:none;font-size:12px;letter-spacing:.02em;
+  transition:color .15s,padding-left .15s,border-left-color .15s;border-left:2px solid transparent;
+}
+aside a:hover,aside a.on{color:var(--a1);padding-left:26px;border-left-color:var(--a1)}
+
+main{padding:52px 52px 120px;max-width:860px}
+
+.hero{margin-bottom:60px}
+
+.pill{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--w);border:1px solid var(--wb);border-radius:99px;
+  padding:5px 14px 5px 9px;font-size:10px;color:var(--dim);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.07);
+  margin-bottom:18px;letter-spacing:.06em;
+}
+.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--a1);box-shadow:0 0 7px var(--a1);animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+.hero h1{font-size:48px;font-weight:700;line-height:1.05;letter-spacing:-.03em;color:var(--text);margin-bottom:14px}
+.hero h1 em{
+  background:linear-gradient(100deg,var(--a1),var(--a2),var(--a3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:normal;
+}
+.hero p{color:var(--dim);font-size:13px;max-width:400px;line-height:1.8}
+
+.cat-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+
+.cat-tab{
+  position:relative;overflow:hidden;
+  padding:8px 18px;
+  font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;font-weight:500;text-transform:lowercase;
+  color:var(--dim);
+  background:var(--w);
+  border:1px solid var(--bord);
+  border-radius:10px;cursor:pointer;
+  transition:color .2s,border-color .2s,box-shadow .2s,transform .15s;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.07),inset 0 -1px 0 rgba(0,0,0,0.15),0 2px 8px rgba(0,0,0,0.2);
+}
+.cat-tab::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.18) 48%,rgba(255,255,255,0.06) 52%,transparent 80%);
+  transform:translateX(-120%);transition:transform .55s ease;pointer-events:none;
+}
+.cat-tab:hover::before{transform:translateX(120%)}
+.cat-tab:hover{
+  color:var(--text);border-color:var(--wb);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.14),inset 0 -1px 0 rgba(0,0,0,0.15),0 4px 16px rgba(0,0,0,0.3);
+  transform:translateY(-1px);
+}
+.cat-tab.active{
+  color:#080b12;
+  background:linear-gradient(135deg,var(--a1),var(--a2));
+  border-color:transparent;
+  box-shadow:0 0 20px rgba(125,211,252,0.3),inset 0 1px 0 rgba(255,255,255,0.3),0 4px 14px rgba(0,0,0,0.3);
+  transform:translateY(-1px);
+}
+.cat-tab.active::before{display:none}
+
+.panel{display:none}
+.panel.show{display:block}
+
+section{margin-bottom:56px;scroll-margin-top:24px;animation:fadeup .3s ease both}
+@keyframes fadeup{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+section h2{
+  font-size:20px;font-weight:600;color:var(--text);
+  margin-bottom:12px;padding-bottom:11px;
+  border-bottom:1px solid var(--bord);letter-spacing:-.015em;
+}
+section h3{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--a2);margin:22px 0 9px}
+section p,section li{color:var(--dim);font-size:13px;line-height:1.8;margin-bottom:8px}
+section ul{padding-left:16px}
+section li{margin-bottom:3px}
+
+code{
+  font-family:'Geist Mono',monospace;font-size:12px;color:var(--a1);
+  background:rgba(125,211,252,0.07);border:1px solid rgba(125,211,252,0.14);padding:1px 6px;border-radius:5px;
+}
+
+.note,.warn{
+  padding:12px 16px;border-radius:9px;margin:12px 0;
+  font-size:12px;line-height:1.7;color:var(--dim);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.note{background:rgba(125,211,252,0.05);border:1px solid rgba(125,211,252,0.14);border-left:3px solid var(--a1)}
+.warn{background:rgba(196,181,253,0.05);border:1px solid rgba(196,181,253,0.14);border-left:3px solid var(--a2)}
+.note strong{color:var(--a1)}.warn strong{color:var(--a2)}
+
+.cb{
+  margin:12px 0 20px;border-radius:12px;overflow:hidden;
+  border:1px solid var(--bord);
+  background:rgba(0,0,0,0.38);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:0 2px 18px rgba(0,0,0,0.28),inset 0 1px 0 rgba(255,255,255,0.05);
+  transform-style:preserve-3d;
+  transition:transform .25s,box-shadow .25s;
+}
+.cb:hover{
+  transform:perspective(700px) rotateX(1.2deg) translateY(-3px);
+  box-shadow:0 10px 36px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.cb-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 14px;
+  background:rgba(255,255,255,0.03);border-bottom:1px solid var(--bord);
+}
+.dots{display:flex;gap:5px}
+.dots span{width:9px;height:9px;border-radius:50%}
+.d1{background:#ff5f57}.d2{background:#febc2e}.d3{background:#28c840}
+.cb-lang{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+
+.cb-copy{
+  position:relative;overflow:hidden;
+  font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.07em;
+  color:var(--dim);
+  background:var(--w);
+  border:1px solid var(--bord);
+  border-radius:7px;padding:4px 11px;cursor:pointer;
+  transition:color .18s,border-color .18s,box-shadow .18s,transform .12s;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.07),inset 0 -1px 0 rgba(0,0,0,0.12);
+}
+.cb-copy::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent 15%,rgba(255,255,255,0.22) 46%,rgba(255,255,255,0.07) 54%,transparent 85%);
+  transform:translateX(-110%);transition:transform .5s ease;pointer-events:none;
+}
+.cb-copy:hover::before{transform:translateX(110%)}
+.cb-copy:hover{
+  color:var(--a1);border-color:rgba(125,211,252,0.35);
+  box-shadow:0 0 10px rgba(125,211,252,0.12),inset 0 1px 0 rgba(255,255,255,0.1);
+  transform:translateY(-1px);
+}
+.cb-copy:active{transform:translateY(0) scale(.97)}
+.cb-copy.ok{color:#28c840;border-color:rgba(40,200,64,0.4);box-shadow:0 0 10px rgba(40,200,64,0.14)}
+
+pre{padding:16px 18px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--bord) transparent}
+pre::-webkit-scrollbar{height:3px}
+pre::-webkit-scrollbar-thumb{background:var(--bord);border-radius:2px}
+pre code{background:none;border:none;padding:0;color:var(--text);font-size:12.5px;line-height:1.75;white-space:pre}
+
+.h{color:#c792ea;font-weight:600}
+.b{color:var(--text);font-weight:600}
+.i{color:#f1fa8c;font-style:italic}
+.l{color:#89ddff}
+.s{color:#c3e88d}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0 20px}
+th{text-align:left;padding:9px 13px;border:1px solid var(--bord);background:var(--surf);color:var(--text);font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+td{padding:8px 13px;border:1px solid var(--bord);color:var(--dim);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,0.015)}
+
+.madeby{
+  position:fixed;bottom:20px;right:20px;z-index:100;
+  background:var(--w);border:1px solid var(--bord);border-radius:99px;
+  padding:7px 16px;font-size:11px;color:var(--dim);
+  font-family:'Geist Mono',monospace;
+  backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));
+  box-shadow:0 4px 18px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.07);
+  transition:all .2s;user-select:none;overflow:hidden;
+}
+.madeby::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.14) 48%,rgba(255,255,255,0.04) 54%,transparent 80%);
+  transform:translateX(-120%);transition:transform .55s ease;pointer-events:none;
+}
+.madeby:hover::before{transform:translateX(120%)}
+.madeby:hover{color:var(--text);box-shadow:0 6px 28px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.1);transform:translateY(-2px)}
+.madeby a{color:var(--a1);text-decoration:none}
+.madeby a:hover{text-decoration:underline}
+
+@media(max-width:860px){
+  .wrap{grid-template-columns:1fr}
+  aside{display:none}
+  main{padding:36px 18px 80px}
+  .hero h1{font-size:34px}
+}
+</style>
+</head>
+<body>
+
+<div class="scene">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+<div class="grid"></div>
+
+<div class="wrap">
+
+<aside>
+  <div class="logo">
+    <div class="logo-text">md.tut</div>
+    <div class="logo-sub">complete reference</div>
+  </div>
+  <nav id="nav">
+    <span class="nav-label">basics</span>
+    <a href="#" onclick="switchTab('basics');return false">headings</a>
+    <a href="#" onclick="switchTab('basics');return false">paragraphs</a>
+    <a href="#" onclick="switchTab('basics');return false">emphasis</a>
+    <a href="#" onclick="switchTab('basics');return false">blockquotes</a>
+    <a href="#" onclick="switchTab('basics');return false">lists</a>
+    <span class="nav-label">code</span>
+    <a href="#" onclick="switchTab('code');return false">inline code</a>
+    <a href="#" onclick="switchTab('code');return false">fenced blocks</a>
+    <span class="nav-label">structure</span>
+    <a href="#" onclick="switchTab('structure');return false">dividers</a>
+    <a href="#" onclick="switchTab('structure');return false">links</a>
+    <a href="#" onclick="switchTab('structure');return false">images</a>
+    <a href="#" onclick="switchTab('structure');return false">tables</a>
+    <span class="nav-label">gfm extras</span>
+    <a href="#" onclick="switchTab('gfm');return false">task lists</a>
+    <a href="#" onclick="switchTab('gfm');return false">footnotes</a>
+    <a href="#" onclick="switchTab('gfm');return false">strikethrough</a>
+    <a href="#" onclick="switchTab('gfm');return false">collapsible</a>
+    <span class="nav-label">advanced</span>
+    <a href="#" onclick="switchTab('advanced');return false">html in md</a>
+    <a href="#" onclick="switchTab('advanced');return false">escaping</a>
+    <a href="#" onclick="switchTab('advanced');return false">mermaid</a>
+    <a href="#" onclick="switchTab('advanced');return false">math</a>
+    <a href="#" onclick="switchTab('advanced');return false">badges</a>
+    <span class="nav-label">reference</span>
+    <a href="#" onclick="switchTab('reference');return false">readme guide</a>
+    <a href="#" onclick="switchTab('reference');return false">flavors</a>
+    <a href="#" onclick="switchTab('reference');return false">quick ref</a>
+  </nav>
+</aside>
+
+<main>
+
+  <div class="hero">
+    <div class="pill"><span class="pill-dot"></span> markdown tutorial</div>
+    <h1>learn <em>markdown</em><br>properly.</h1>
+    <p>every element, every parameter. made by two people who actually use this stuff.</p>
+  </div>
+
+  <div class="cat-tabs">
+    <button class="cat-tab active" data-tab="basics" onclick="switchTab('basics')">basics</button>
+    <button class="cat-tab" data-tab="code" onclick="switchTab('code')">code</button>
+    <button class="cat-tab" data-tab="structure" onclick="switchTab('structure')">structure</button>
+    <button class="cat-tab" data-tab="gfm" onclick="switchTab('gfm')">gfm extras</button>
+    <button class="cat-tab" data-tab="advanced" onclick="switchTab('advanced')">advanced</button>
+    <button class="cat-tab" data-tab="reference" onclick="switchTab('reference')">reference</button>
+  </div>
+
+  <div class="panel show" id="tab-basics">
+
+    <section id="headings">
+      <h2>Headings</h2>
+      <p>use <code>#</code> followed by a space. six levels, h1 through h6. always one space between the hash and the text or it won't parse right.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code><span class="h"># Heading 1</span>
+<span class="h">## Heading 2</span>
+<span class="h">### Heading 3</span>
+<span class="h">#### Heading 4</span>
+<span class="h">##### Heading 5</span>
+<span class="h">###### Heading 6</span>
+
+Heading 1
+=========
+
+Heading 2
+---------</code></pre>
+      </div>
+      <div class="note"><strong>heads up:</strong> h1 should appear once per doc, as the title. GitHub auto-generates anchor links from headings.</div>
+    </section>
+
+    <section id="paragraphs">
+      <h2>Paragraphs & Line Breaks</h2>
+      <p>blank line between blocks = new paragraph. two trailing spaces or a backslash = line break without a new paragraph.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>first paragraph.
+
+second paragraph.
+
+line one  
+line two
+
+line one\
+line two</code></pre>
+      </div>
+    </section>
+
+    <section id="emphasis">
+      <h2>Emphasis</h2>
+      <p>asterisks work better than underscores across parsers. underscores inside words like <code>some_var_name</code> won't trigger italic in CommonMark.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code><span class="i">*italic*</span>
+<span class="i">_italic_</span>
+
+<span class="b">**bold**</span>
+<span class="b">__bold__</span>
+
+<span class="b"><span class="i">***bold and italic***</span></span>
+
+<span class="b">**bold with <span class="i">_nested italic_</span>**</span></code></pre>
+      </div>
+    </section>
+
+    <section id="blockquotes">
+      <h2>Blockquotes</h2>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>&gt; simple quote
+
+&gt; multi-line
+&gt; continues here
+
+&gt; level one
+&gt;&gt; level two
+&gt;&gt;&gt; level three
+
+&gt; ### heading inside a quote
+&gt;
+&gt; - list item
+&gt; **bold** inside a quote</code></pre>
+      </div>
+    </section>
+
+    <section id="lists">
+      <h2>Lists</h2>
+      <h3>unordered</h3>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code><span class="l">-</span> item one
+<span class="l">-</span> item two
+<span class="l">-</span> item three
+
+* and + also work, keep it consistent</code></pre>
+      </div>
+      <h3>ordered</h3>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>1. first
+2. second
+3. third
+
+1. first
+1. second
+1. third</code></pre>
+      </div>
+      <h3>nested</h3>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code><span class="l">-</span> item one
+    <span class="l">-</span> sub-item
+    <span class="l">-</span> sub-item
+        <span class="l">-</span> sub-sub-item
+<span class="l">-</span> item two</code></pre>
+      </div>
+      <h3>list with paragraph</h3>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code><span class="l">-</span> first item
+
+    indent 4 spaces to attach paragraph to list item.
+
+<span class="l">-</span> second item</code></pre>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="panel" id="tab-code">
+
+    <section id="inline-code">
+      <h2>Inline Code</h2>
+      <p>wrap with single backticks. to put a backtick inside, use double backticks.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>use the `printf()` function.
+
+`` use `backticks` like this ``</code></pre>
+      </div>
+    </section>
+
+    <section id="fenced">
+      <h2>Fenced Code Blocks</h2>
+      <p>triple backticks open and close the block. put the language name right after the opening backticks for syntax highlighting.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>```python
+def hello():
+    print("hello world")
+```
+
+```javascript
+const greet = name => `hey, ${name}`
+```
+
+```bash
+git clone https://github.com/user/repo
+cd repo && npm install
+```
+
+```json
+{
+  "name": "project",
+  "version": "1.0.0"
+}
+```
+
+```sql
+SELECT id, name FROM users WHERE active = true;
+```
+
+```typescript
+interface User {
+  id: number
+  name: string
+}
+```
+
+```go
+func main() {
+    fmt.Println("hi go")
+}
+```
+
+```rust
+fn main() {
+    println!("hi rust");
+}
+```
+
+```css
+body {
+  background: #000;
+  color: #fff;
+}
+```</code></pre>
+      </div>
+    </section>
+
+    <section id="indented">
+      <h2>Indented Code (legacy)</h2>
+      <p>indent four spaces. fenced blocks are always preferred over this.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>    indent four spaces = code block
+    still part of the same block</code></pre>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="panel" id="tab-structure">
+
+    <section id="hr">
+      <h2>Horizontal Dividers</h2>
+      <p>three hyphens, asterisks, or underscores. all render the same.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>---
+
+***
+
+___</code></pre>
+      </div>
+    </section>
+
+    <section id="links">
+      <h2>Links</h2>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code><span class="l">[link text](https://example.com)</span>
+<span class="l">[link text](https://example.com "title on hover")</span>
+
+<span class="l">[link text][ref]</span>
+[ref]: https://example.com "optional title"
+
+&lt;https://example.com&gt;
+&lt;user@example.com&gt;
+
+<span class="l">[contributing guide](CONTRIBUTING.md)</span>
+<span class="l">[docs](docs/guide.md)</span>
+
+<span class="l">[back to top](#headings)</span>
+<span class="l">[jump to tables](#tables)</span></code></pre>
+      </div>
+    </section>
+
+    <section id="images">
+      <h2>Images</h2>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>![alt text](https://example.com/img.png)
+![alt text](https://example.com/img.png "title")
+
+![alt][img-ref]
+[img-ref]: https://example.com/img.png
+
+![logo](assets/logo.png)
+
+<span class="l">[![alt](img.png)](https://example.com)</span>
+
+&lt;img src="img.png" alt="logo" width="300" /&gt;
+
+&lt;div align="center"&gt;
+  &lt;img src="logo.png" width="200" /&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+    </section>
+
+    <section id="tables">
+      <h2>Tables</h2>
+      <p>GFM extension. the separator row is required. outer pipes are optional but look cleaner.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>| col 1 | col 2 | col 3 |
+| ----- | ----- | ----- |
+| cell  | cell  | cell  |
+| cell  | cell  | cell  |
+
+| left         | center        | right         |
+| :----------- | :-----------: | ------------: |
+| :---  left   | :---:  center |   ---:  right |</code></pre>
+      </div>
+      <div class="warn"><strong>note:</strong> tables can't contain block elements like code blocks or lists.</div>
+    </section>
+
+  </div>
+
+  <div class="panel" id="tab-gfm">
+
+    <section id="tasks">
+      <h2>Task Lists</h2>
+      <p>renders as interactive checkboxes on GitHub.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code><span class="s">- [x]</span> done
+<span class="l">- [ ]</span> not done
+<span class="s">- [x]</span> also done
+
+<span class="s">- [x]</span> main task
+    <span class="s">- [x]</span> sub done
+    <span class="l">- [ ]</span> sub not done</code></pre>
+      </div>
+    </section>
+
+    <section id="footnotes">
+      <h2>Footnotes</h2>
+      <p>footnote content always renders at the bottom regardless of where you define it.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>sentence with a footnote.[^1]
+
+another one.[^note]
+
+[^1]: footnote content here.
+[^note]: footnotes can have **markdown** inside.</code></pre>
+      </div>
+    </section>
+
+    <section id="strikethrough">
+      <h2>Strikethrough</h2>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>~~this text is struck through~~</code></pre>
+      </div>
+    </section>
+
+    <section id="collapsible">
+      <h2>Collapsible Sections</h2>
+      <p>leave a blank line after <code>&lt;summary&gt;</code> or markdown inside won't render.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">html + markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>&lt;details&gt;
+&lt;summary&gt;click to expand&lt;/summary&gt;
+
+content here, with full **markdown** support.
+
+- list item
+- another item
+
+```bash
+echo "code block inside collapsible"
+```
+
+&lt;/details&gt;
+
+&lt;details open&gt;
+&lt;summary&gt;visible by default&lt;/summary&gt;
+
+content here.
+
+&lt;/details&gt;</code></pre>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="panel" id="tab-advanced">
+
+    <section id="html-in-md">
+      <h2>HTML in Markdown</h2>
+      <p>most processors allow raw HTML. GitHub sanitizes some tags. markdown inside html blocks won't parse.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">html</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>&lt;img src="logo.png" alt="logo" width="200" /&gt;
+
+&lt;div align="center"&gt;
+  &lt;img src="logo.png" width="300" /&gt;
+  &lt;h1&gt;project name&lt;/h1&gt;
+  &lt;p&gt;short description&lt;/p&gt;
+&lt;/div&gt;
+
+line one&lt;br&gt;line two
+
+press &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;C&lt;/kbd&gt;
+
+&lt;mark&gt;highlighted&lt;/mark&gt;
+
+&lt;!-- hidden from rendered output --&gt;</code></pre>
+      </div>
+    </section>
+
+    <section id="escaping">
+      <h2>Escaping Characters</h2>
+      <p>backslash before a character stops it from being parsed as syntax.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>\*not italic\*
+\# not a heading
+\[not a link\]
+\`not inline code\`
+\\ literal backslash
+
+\ ` * _ { } [ ] &lt; &gt; ( ) # + - . ! |</code></pre>
+      </div>
+    </section>
+
+    <section id="mermaid">
+      <h2>Mermaid Diagrams</h2>
+      <p>GitHub renders these natively. use the <code>mermaid</code> language tag on any fenced block.</p>
+      <h3>flowchart</h3>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">mermaid</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>```mermaid
+flowchart TD
+    A[Start] --> B{Decision}
+    B -->|Yes| C[Do this]
+    B -->|No| D[Do that]
+    C --> E[End]
+    D --> E
+```</code></pre>
+      </div>
+      <h3>sequence diagram</h3>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">mermaid</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: HTTP Request
+    Server-->>Client: HTTP Response
+```</code></pre>
+      </div>
+      <h3>gantt</h3>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">mermaid</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>```mermaid
+gantt
+    title project timeline
+    dateFormat YYYY-MM-DD
+    section phase 1
+    task one   :a1, 2024-01-01, 30d
+    task two   :after a1, 20d
+```</code></pre>
+      </div>
+      <h3>er diagram</h3>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">mermaid</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>```mermaid
+erDiagram
+    USER {
+        int id
+        string name
+    }
+    POST {
+        int id
+        int user_id
+    }
+    USER ||--o{ POST : writes
+```</code></pre>
+      </div>
+    </section>
+
+    <section id="math">
+      <h2>Math — LaTeX</h2>
+      <p>GitHub supports LaTeX math. <code>$</code> for inline, <code>$$</code> for block.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>the formula is $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$.
+
+$$
+\sum_{i=1}^{n} i = \frac{n(n+1)}{2}
+$$
+
+$$
+E = mc^2
+$$
+
+$$
+\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
+$$</code></pre>
+      </div>
+    </section>
+
+    <section id="badges">
+      <h2>Badges</h2>
+      <p>images from shields.io. used to show build status, version, license, etc.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code>![build](https://img.shields.io/github/actions/workflow/status/user/repo/ci.yml)
+![version](https://img.shields.io/github/v/release/user/repo)
+![license](https://img.shields.io/github/license/user/repo)
+![stars](https://img.shields.io/github/stars/user/repo?style=social)
+![issues](https://img.shields.io/github/issues/user/repo)
+
+<span class="l">[![license](https://img.shields.io/github/license/user/repo)](LICENSE)</span>
+
+![status](https://img.shields.io/badge/status-stable-green)
+![custom](https://img.shields.io/badge/built%20with-markdown-blue)</code></pre>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="panel" id="tab-reference">
+
+    <section id="readme">
+      <h2>README Structure</h2>
+      <p>the readme is the front page of your project. put the important stuff first, use code blocks for every command, link the license instead of pasting it.</p>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">markdown</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code><span class="h"># project name</span>
+
+one or two sentences about what this does.
+
+<span class="h">## features</span>
+
+<span class="l">-</span> feature one
+<span class="l">-</span> feature two
+
+<span class="h">## requirements</span>
+
+<span class="l">-</span> node.js 18+
+<span class="l">-</span> npm 9+
+
+<span class="h">## installation</span>
+
+```bash
+git clone https://github.com/user/project.git
+cd project
+npm install
+```
+
+<span class="h">## usage</span>
+
+```bash
+npm start
+```
+
+<span class="h">## configuration</span>
+
+| variable       | default | description      |
+| -------------- | ------- | ---------------- |
+| `PORT`         | `3000`  | server port      |
+| `DATABASE_URL` | —       | connection string |
+
+<span class="h">## contributing</span>
+
+1. fork the repo
+2. `git checkout -b feature/name`
+3. `git commit -m "add feature"`
+4. `git push origin feature/name`
+5. open a pull request
+
+<span class="h">## license</span>
+
+<span class="l">[MIT](LICENSE)</span></code></pre>
+      </div>
+    </section>
+
+    <section id="flavors">
+      <h2>Markdown Flavors</h2>
+      <p>different tools implement different versions. most things on GitHub use GFM.</p>
+      <table>
+        <thead>
+          <tr><th>flavor</th><th>used by</th><th>notable extras</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>CommonMark</code></td><td>standard base</td><td>none — base spec</td></tr>
+          <tr><td><code>GFM</code></td><td>GitHub, GitLab</td><td>tables, tasks, strikethrough, autolinks</td></tr>
+          <tr><td><code>MultiMarkdown</code></td><td>various editors</td><td>footnotes, definition lists, metadata</td></tr>
+          <tr><td><code>kramdown</code></td><td>Jekyll, GitHub Pages</td><td>attributes, footnotes, math</td></tr>
+          <tr><td><code>Pandoc</code></td><td>Pandoc</td><td>everything basically</td></tr>
+          <tr><td><code>R Markdown</code></td><td>RStudio</td><td>code execution, embedded output</td></tr>
+          <tr><td><code>MDX</code></td><td>Next.js, Docusaurus</td><td>JSX inside markdown</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="quickref">
+      <h2>Quick Reference</h2>
+      <div class="cb">
+        <div class="cb-top">
+          <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span class="cb-lang">everything at a glance</span>
+          <button class="cb-copy" onclick="cp(this)">copy</button>
+        </div>
+        <pre><code><span class="h"># h1  ## h2  ### h3  #### h4  ##### h5  ###### h6</span>
+
+<span class="i">*italic*</span>  <span class="b">**bold**</span>  <span class="b"><span class="i">***bold italic***</span></span>  ~~strikethrough~~
+
+&gt; blockquote
+
+<span class="l">-</span> unordered item
+1. ordered item
+<span class="s">- [x]</span> task done
+<span class="l">- [ ]</span> task pending
+
+`inline code`
+
+```lang
+fenced code block
+```
+
+<span class="l">[link](url)</span>
+![image](url)
+
+| col | col |
+| --- | --- |
+| cell | cell |
+
+---  horizontal rule
+
+[^1]  footnote ref
+[^1]: footnote text
+
+$inline math$
+$$block math$$
+
+&lt;details&gt;&lt;summary&gt;title&lt;/summary&gt;content&lt;/details&gt;
+
+\*escape a character\*</code></pre>
+      </div>
+    </section>
+
+  </div>
+
+</main>
+</div>
+
+<div class="madeby">made by <a href="https://noctlolz.github.io/MarkDownTut" target="_blank">n0ct</a> &amp; alemx</div>
+
+<script>
+function cp(btn) {
+  const text = btn.closest('.cb').querySelector('pre').innerText
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'copied!'
+    btn.classList.add('ok')
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('ok') }, 1600)
+  })
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'))
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'))
+  document.getElementById('tab-' + name).classList.add('show')
+  document.querySelector('[data-tab="' + name + '"]').classList.add('active')
+}
+</script>
+
+</body>
+</html>

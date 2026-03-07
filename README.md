@@ -1,3 +1,20 @@
+# MarkDownTut
+
+Markdown tutorial and examples.
+
+## Features
+
+- Tables
+- Code blocks
+- Formatting
+
+## Example
+
+| Syntax | Example |
+|------|------|
+| Bold | **text** |
+| Italic | *text* |
+
 # Markdown Complete Reference
 
 Markdown is a lightweight markup language created by John Gruber in 2004. It converts plain text into HTML and is the standard for README files, documentation, and technical writing. This document covers every element of CommonMark and GitHub Flavored Markdown (GFM).
