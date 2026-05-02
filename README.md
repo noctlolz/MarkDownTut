@@ -1,6 +1,6 @@
 # MarkDownTut
 
-Markdown tutorial and examples.
+Markdown tutorial and examples, Visit https://noctlolz.github.io/MarkDownTut/ For more
 
 ## Features
 
